@@ -16,10 +16,12 @@ class TopicService(
 
     fun list(): List<TopicView> = topics.map { topicViewMapper.map(it) }
 
-    fun findById(id: Long): TopicView? {
+    fun findById(id: Long): TopicView {
         val topic = topics.find { id == it.id } ?: throw Error("Topic not found")
         return topicViewMapper.map(topic)
     }
+
+    fun findByIdModel(id: Long): Topic = topics.find { id == it.id } ?: throw Error("Topic not found")
 
     fun create(dto: NewTopicForm) {
         val topic = newTopicFormMapper.map(dto)
