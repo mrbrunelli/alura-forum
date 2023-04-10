@@ -41,6 +41,11 @@ class TopicService(
             answers = topic.answers,
             status = topic.status,
             createdAt = topic.createdAt
-        )) as MutableList<Topic>
+        )).toMutableList()
+    }
+
+    fun delete(id: Long) {
+        val topic = topics.find {it.id == id} ?: throw Error("Topic not found")
+        topics = topics.minus(topic).toMutableList()
     }
 }

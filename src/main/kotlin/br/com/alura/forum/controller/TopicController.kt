@@ -4,6 +4,7 @@ import br.com.alura.forum.dto.NewTopicForm
 import br.com.alura.forum.dto.TopicView
 import br.com.alura.forum.dto.UpdateTopicForm
 import br.com.alura.forum.service.TopicService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,4 +28,7 @@ class TopicController(private val service: TopicService) {
 
     @PutMapping
     fun update(@RequestBody @Valid form: UpdateTopicForm) = service.update(form)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) = service.delete(id)
 }
