@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.NewTopicForm
 import br.com.alura.forum.dto.TopicView
 import br.com.alura.forum.dto.UpdateTopicForm
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.NewTopicFormMapper
 import br.com.alura.forum.mapper.TopicViewMapper
 import br.com.alura.forum.model.Topic
@@ -14,6 +15,7 @@ class TopicService(
     private val newTopicFormMapper: NewTopicFormMapper
 ) {
     private var topics: MutableList<Topic> = mutableListOf()
+    private val notFoundMessage = "topic not found"
 
     fun list(): List<TopicView> = topics.map { topicViewMapper.map(it) }
 
@@ -32,7 +34,7 @@ class TopicService(
     }
 
     fun update(form: UpdateTopicForm): TopicView {
-        val topic = topics.find { it.id == form.id} ?: throw Error("Topic not found")
+        val topic = topics.find { it.id == form.id} ?: throw NotFoundException(notFoundMessage)
         val newTopic = Topic(
             id = form.id,
             title = form.title,
@@ -48,7 +50,7 @@ class TopicService(
     }
 
     fun delete(id: Long) {
-        val topic = topics.find {it.id == id} ?: throw Error("Topic not found")
+        val topic = topics.find {it.id == id} ?: throw NotFoundException(notFoundMessage)
         topics = topics.minus(topic).toMutableList()
     }
 }
