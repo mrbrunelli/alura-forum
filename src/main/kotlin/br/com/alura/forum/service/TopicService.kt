@@ -24,15 +24,16 @@ class TopicService(
 
     fun findByIdModel(id: Long): Topic = topics.find { id == it.id } ?: throw Error("Topic not found")
 
-    fun create(dto: NewTopicForm) {
+    fun create(dto: NewTopicForm): TopicView {
         val topic = newTopicFormMapper.map(dto)
         topic.id = topics.size.toLong() + 1
         topics.add(topic)
+        return topicViewMapper.map(topic)
     }
 
-    fun update(form: UpdateTopicForm) {
+    fun update(form: UpdateTopicForm): TopicView {
         val topic = topics.find { it.id == form.id} ?: throw Error("Topic not found")
-        topics = topics.minus(topic).plus(Topic(
+        val newTopic = Topic(
             id = form.id,
             title = form.title,
             message = form.message,
@@ -41,7 +42,9 @@ class TopicService(
             answers = topic.answers,
             status = topic.status,
             createdAt = topic.createdAt
-        )).toMutableList()
+        )
+        topics = topics.minus(topic).plus(newTopic).toMutableList()
+        return topicViewMapper.map(newTopic)
     }
 
     fun delete(id: Long) {
