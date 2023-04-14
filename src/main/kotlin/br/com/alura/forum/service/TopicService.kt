@@ -7,50 +7,39 @@ import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.NewTopicFormMapper
 import br.com.alura.forum.mapper.TopicViewMapper
 import br.com.alura.forum.model.Topic
+import br.com.alura.forum.repository.TopicRepository
 import org.springframework.stereotype.Service
 
 @Service
 class TopicService(
+    private val repository: TopicRepository,
     private val topicViewMapper: TopicViewMapper,
     private val newTopicFormMapper: NewTopicFormMapper
 ) {
-    private var topics: MutableList<Topic> = mutableListOf()
     private val notFoundMessage = "topic not found"
 
-    fun list(): List<TopicView> = topics.map { topicViewMapper.map(it) }
+    fun list(): List<TopicView> = repository.findAll().map { topicViewMapper.map(it) }
 
     fun findById(id: Long): TopicView {
-        val topic = topics.find { id == it.id } ?: throw Error("Topic not found")
+        val topic = repository.findById(id).orElseThrow { NotFoundException(notFoundMessage) }
         return topicViewMapper.map(topic)
     }
 
-    fun findByIdModel(id: Long): Topic = topics.find { id == it.id } ?: throw Error("Topic not found")
+    fun findByIdModel(id: Long): Topic = repository.findById(id).orElseThrow { NotFoundException(notFoundMessage) }
 
     fun create(dto: NewTopicForm): TopicView {
         val topic = newTopicFormMapper.map(dto)
-        topic.id = topics.size.toLong() + 1
-        topics.add(topic)
+        repository.save(topic)
         return topicViewMapper.map(topic)
     }
 
     fun update(form: UpdateTopicForm): TopicView {
-        val topic = topics.find { it.id == form.id} ?: throw NotFoundException(notFoundMessage)
-        val newTopic = Topic(
-            id = form.id,
-            title = form.title,
-            message = form.message,
-            author = topic.author,
-            course = topic.course,
-            answers = topic.answers,
-            status = topic.status,
-            createdAt = topic.createdAt
-        )
-        topics = topics.minus(topic).plus(newTopic).toMutableList()
-        return topicViewMapper.map(newTopic)
+        val topic = repository.findById(form.id).orElseThrow { NotFoundException(notFoundMessage) }
+        topic.title = form.title
+        topic.message = form.message
+        // TODO need to update
+        return topicViewMapper.map(topic)
     }
 
-    fun delete(id: Long) {
-        val topic = topics.find {it.id == id} ?: throw NotFoundException(notFoundMessage)
-        topics = topics.minus(topic).toMutableList()
-    }
+    fun delete(id: Long) = repository.deleteById(id)
 }
