@@ -55,4 +55,7 @@ class TopicController(private val service: TopicService) {
     @Transactional
     @CacheEvict(value = ["topics"], allEntries = true)
     fun delete(@PathVariable id: Long) = service.delete(id)
+
+    @GetMapping("/report")
+    fun report() = service.report()
 }
