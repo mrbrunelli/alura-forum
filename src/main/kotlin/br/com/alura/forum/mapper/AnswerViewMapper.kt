@@ -10,7 +10,7 @@ class AnswerViewMapper : Mapper<Answer, AnswerView> {
         return AnswerView(
             id = t.id,
             message = t.message,
-            isSoluction = t.isSoluction,
+            isSolution = t.isSolution,
             createdAt = t.createdAt,
             author = t.author
         )

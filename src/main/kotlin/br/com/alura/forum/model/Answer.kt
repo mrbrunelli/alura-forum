@@ -13,5 +13,5 @@ data class Answer(
     val author: Author,
     @ManyToOne
     var topic: Topic? = null,
-    val isSoluction: Boolean = false
+    val isSolution: Boolean = false
 )
