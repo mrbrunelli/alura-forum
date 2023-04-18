@@ -6,3 +6,5 @@ CREATE TABLE course(
 );
 
 INSERT INTO course(id, name, category) VALUES (1, 'Kotlin', 'Programação');
+INSERT INTO course(id, name, category) VALUES (2, 'React', 'Front-end');
+INSERT INTO course(id, name, category) VALUES (3, 'Figma', 'UX/UI');
