@@ -6,6 +6,7 @@ import br.com.alura.forum.dto.UpdateTopicForm
 import br.com.alura.forum.service.TopicService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +21,7 @@ class TopicController(private val service: TopicService) {
     @GetMapping
     fun list(
         @RequestParam(required = false) name: String?,
-        @PageableDefault(size = 5) pagination: Pageable
+        @PageableDefault(size = 5, sort = ["createdAt"], direction = Sort.Direction.DESC) pagination: Pageable
     ): Page<TopicView> = service.list(name, pagination)
 
     @GetMapping("/{id}")
