@@ -58,4 +58,7 @@ class TopicController(private val service: TopicService) {
 
     @GetMapping("/report")
     fun report() = service.report()
+
+    @GetMapping("/not-answered")
+    fun findNotAnswered() = service.findNotAnswered()
 }

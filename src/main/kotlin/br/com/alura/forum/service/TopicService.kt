@@ -53,4 +53,9 @@ class TopicService(
     fun delete(id: Long) = repository.deleteById(id)
 
     fun report(): List<TopicByCategoryDto> = repository.report()
+
+    fun findNotAnswered(): List<TopicView> {
+        val topics = repository.findNotAnswered()
+        return topics.map { topicViewMapper.map(it) }
+    }
 }

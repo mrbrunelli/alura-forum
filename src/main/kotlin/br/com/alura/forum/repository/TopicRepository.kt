@@ -12,4 +12,7 @@ interface TopicRepository: JpaRepository<Topic, Long> {
 
     @Query("SELECT new br.com.alura.forum.dto.TopicByCategoryDto(course.category, count(t)) FROM Topic t JOIN t.course course GROUP BY course.category")
     fun report(): List<TopicByCategoryDto>
+
+    @Query("SELECT t from Topic t WHERE t.answers IS EMPTY")
+    fun findNotAnswered(): List<Topic>
 }
