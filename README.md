@@ -22,7 +22,7 @@ The following guides illustrate how to use some features concretely:
 
 ## How to build
 
-1. Generate project's jar
+1. Generate the project's jar
 
 ```shell
 mvn package
