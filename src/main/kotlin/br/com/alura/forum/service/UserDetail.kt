@@ -4,7 +4,7 @@ import br.com.alura.forum.model.Author
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetail(private val user: Author) : UserDetails {
-    override fun getAuthorities() = null
+    override fun getAuthorities() = user.role
 
     override fun getPassword() = user.password
 

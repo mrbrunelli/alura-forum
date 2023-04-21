@@ -14,7 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @EnableWebSecurity
 class SecurityConfiguration(private val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
-        http?.authorizeRequests()
+        http
+            ?.authorizeRequests()
+            ?.antMatchers("/topics")
+            ?.hasAuthority("READ_WRITE")
             ?.anyRequest()
             ?.authenticated()
             ?.and()
