@@ -12,6 +12,7 @@ import br.com.alura.forum.repository.TopicRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class TopicService(
@@ -46,6 +47,7 @@ class TopicService(
         val topic = repository.findById(form.id).orElseThrow { NotFoundException(notFoundMessage) }
         topic.title = form.title
         topic.message = form.message
+        topic.updatedAt = LocalDateTime.now()
         // TODO need to update
         return topicViewMapper.map(topic)
     }

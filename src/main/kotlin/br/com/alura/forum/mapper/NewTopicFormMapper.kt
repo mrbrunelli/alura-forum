@@ -18,7 +18,7 @@ class NewTopicFormMapper(
             title = t.title,
             message = t.message,
             course = course,
-            author = user
+            author = user,
         )
     }
 }
