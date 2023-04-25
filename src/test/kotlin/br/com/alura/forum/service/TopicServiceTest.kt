@@ -17,17 +17,20 @@ import org.springframework.data.domain.Pageable
 import java.util.*
 
 class TopicServiceTest {
-    val topics = PageImpl(listOf(TopicTest.build()))
-    val pagination: Pageable = mockk()
-    val topicRepository: TopicRepository = mockk {
+    private val topics = PageImpl(listOf(TopicTest.build()))
+    private val pagination: Pageable = mockk()
+    private val topicRepository: TopicRepository = mockk {
         every { findByCourseName(any(), any()) } returns topics
         every { findAll(pagination) } returns topics
     }
-    val topicViewMapper: TopicViewMapper = mockk() {
+    private val topicViewMapper: TopicViewMapper = mockk {
+        // I can use slot + capture to retrieve access for the method param
+        // val slot = slot<Topic>()
+        // map(capture(slot))
         every { map(any()) } returns TopicViewTest.build()
     }
-    val topicFormMapper: NewTopicFormMapper = mockk()
-    val topicService = TopicService(topicRepository, topicViewMapper, topicFormMapper)
+    private val topicFormMapper: NewTopicFormMapper = mockk()
+    private val topicService = TopicService(topicRepository, topicViewMapper, topicFormMapper)
 
     @Test
     fun `should list topic by course name`() {
