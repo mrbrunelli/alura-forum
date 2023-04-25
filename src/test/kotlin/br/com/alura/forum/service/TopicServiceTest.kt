@@ -16,20 +16,28 @@ class TopicServiceTest {
     val topics = PageImpl(listOf(TopicTest.build()))
     val pagination: Pageable = mockk()
     val topicRepository: TopicRepository = mockk {
-        every {
-            findByCourseName(any(), any())
-        } returns topics
+        every { findByCourseName(any(), any()) } returns topics
+        every { findAll(pagination) } returns topics
     }
-    val topicViewMapper: TopicViewMapper = mockk()
+    val topicViewMapper: TopicViewMapper = mockk() {
+        every { map(any()) } returns TopicViewTest.build()
+    }
     val topicFormMapper: NewTopicFormMapper = mockk()
     val topicService = TopicService(topicRepository, topicViewMapper, topicFormMapper)
 
     @Test
     fun `should list topic by course name`() {
-        every { topicViewMapper.map(any()) } returns TopicViewTest.build()
         topicService.list("kotlin avançado", pagination)
         verify(exactly = 1) { topicRepository.findByCourseName(any(), any()) }
         verify(exactly = 1) { topicViewMapper.map(any()) }
         verify(exactly = 0) { topicRepository.findAll(pagination) }
+    }
+
+    @Test
+    fun `should list all topics when name is null`() {
+        topicService.list(null, pagination)
+        verify(exactly = 0) {topicRepository.findByCourseName(any(), any())}
+        verify(exactly = 1) { topicViewMapper.map(any()) }
+        verify(exactly = 1) { topicRepository.findAll(pagination) }
     }
 }
