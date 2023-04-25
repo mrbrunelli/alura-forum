@@ -1,5 +1,6 @@
 package br.com.alura.forum.service
 
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.NewTopicFormMapper
 import br.com.alura.forum.mapper.TopicViewMapper
 import br.com.alura.forum.model.TopicTest
@@ -8,9 +9,12 @@ import br.com.alura.forum.repository.TopicRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import java.util.*
 
 class TopicServiceTest {
     val topics = PageImpl(listOf(TopicTest.build()))
@@ -36,8 +40,17 @@ class TopicServiceTest {
     @Test
     fun `should list all topics when name is null`() {
         topicService.list(null, pagination)
-        verify(exactly = 0) {topicRepository.findByCourseName(any(), any())}
+        verify(exactly = 0) { topicRepository.findByCourseName(any(), any()) }
         verify(exactly = 1) { topicViewMapper.map(any()) }
         verify(exactly = 1) { topicRepository.findAll(pagination) }
+    }
+
+    @Test
+    fun `should throws NotFoundException when the topic is not found`() {
+        every { topicRepository.findById(any()) } returns Optional.empty()
+        val exception = assertThrows<NotFoundException> {
+            topicService.findById(1)
+        }
+        assertThat(exception.message).isEqualTo("topic not found")
     }
 }
