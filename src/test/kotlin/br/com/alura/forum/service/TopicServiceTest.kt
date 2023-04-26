@@ -24,7 +24,7 @@ class TopicServiceTest {
         every { findAll(pagination) } returns topics
     }
     private val topicViewMapper: TopicViewMapper = mockk {
-        // I can use slot + capture to retrieve access for the method param
+        // I can use slot + capture to retrieve access for the method's param
         // val slot = slot<Topic>()
         // map(capture(slot))
         every { map(any()) } returns TopicViewTest.build()
