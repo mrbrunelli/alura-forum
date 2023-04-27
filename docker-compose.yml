@@ -17,3 +17,9 @@ services:
       MYSQL_TCP_PORT: 3306
     ports:
       - "3306:3306"
+
+  redis:
+    image: redis
+    container_name: redis-container
+    ports:
+      - "6379:6379"
