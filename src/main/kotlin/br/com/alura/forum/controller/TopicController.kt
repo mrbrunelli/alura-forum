@@ -4,6 +4,7 @@ import br.com.alura.forum.dto.NewTopicForm
 import br.com.alura.forum.dto.TopicView
 import br.com.alura.forum.dto.UpdateTopicForm
 import br.com.alura.forum.service.TopicService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
@@ -18,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/topics")
 class TopicController(private val service: TopicService) {
     @GetMapping
@@ -34,8 +36,7 @@ class TopicController(private val service: TopicService) {
     @Transactional
     @CacheEvict(value = ["topics"], allEntries = true)
     fun create(
-        @RequestBody @Valid form: NewTopicForm,
-        uriBuilder: UriComponentsBuilder
+        @RequestBody @Valid form: NewTopicForm, uriBuilder: UriComponentsBuilder
     ): ResponseEntity<TopicView> {
         val topic = service.create(form)
         val uri = uriBuilder.path("/topics/${topic.id}").build().toUri()
