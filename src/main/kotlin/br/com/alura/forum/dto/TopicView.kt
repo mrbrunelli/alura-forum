@@ -1,6 +1,7 @@
 package br.com.alura.forum.dto
 
 import br.com.alura.forum.model.TopicStatus
+import java.io.Serializable
 import java.time.LocalDateTime
 
 data class TopicView(
@@ -10,4 +11,4 @@ data class TopicView(
     val status: TopicStatus,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime?
-)
+): Serializable
