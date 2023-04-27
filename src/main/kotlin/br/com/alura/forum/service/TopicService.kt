@@ -9,6 +9,8 @@ import br.com.alura.forum.mapper.NewTopicFormMapper
 import br.com.alura.forum.mapper.TopicViewMapper
 import br.com.alura.forum.model.Topic
 import br.com.alura.forum.repository.TopicRepository
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -22,6 +24,7 @@ class TopicService(
 ) {
     private val notFoundMessage = "topic not found"
 
+    @Cacheable(cacheNames = ["topics"], key = "#root.method.name")
     fun list(name: String?, pagination: Pageable): Page<TopicView> {
         val topics = when (name) {
             null -> repository.findAll(pagination)
@@ -37,12 +40,14 @@ class TopicService(
 
     fun findByIdModel(id: Long): Topic = repository.findById(id).orElseThrow { NotFoundException(notFoundMessage) }
 
+    @CacheEvict(value = ["topics"], allEntries = true)
     fun create(dto: NewTopicForm): TopicView {
         val topic = newTopicFormMapper.map(dto)
         repository.save(topic)
         return topicViewMapper.map(topic)
     }
 
+    @CacheEvict(value = ["topics"], allEntries = true)
     fun update(form: UpdateTopicForm): TopicView {
         val topic = repository.findById(form.id).orElseThrow { NotFoundException(notFoundMessage) }
         topic.title = form.title
@@ -52,6 +57,7 @@ class TopicService(
         return topicViewMapper.map(topic)
     }
 
+    @CacheEvict(value = ["topics"], allEntries = true)
     fun delete(id: Long) = repository.deleteById(id)
 
     fun report(): List<TopicByCategoryDto> = repository.report()

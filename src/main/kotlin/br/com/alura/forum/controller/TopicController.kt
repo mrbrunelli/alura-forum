@@ -23,7 +23,6 @@ import javax.validation.Valid
 @RequestMapping("/topics")
 class TopicController(private val service: TopicService) {
     @GetMapping
-    @Cacheable("topics")
     fun list(
         @RequestParam(required = false) name: String?,
         @PageableDefault(size = 5, sort = ["createdAt"], direction = Sort.Direction.DESC) pagination: Pageable
@@ -34,7 +33,6 @@ class TopicController(private val service: TopicService) {
 
     @PostMapping
     @Transactional
-    @CacheEvict(value = ["topics"], allEntries = true)
     fun create(
         @RequestBody @Valid form: NewTopicForm, uriBuilder: UriComponentsBuilder
     ): ResponseEntity<TopicView> {
@@ -45,7 +43,6 @@ class TopicController(private val service: TopicService) {
 
     @PutMapping
     @Transactional
-    @CacheEvict(value = ["topics"], allEntries = true)
     fun update(@RequestBody @Valid form: UpdateTopicForm): ResponseEntity<TopicView> {
         val topic = service.update(form)
         return ResponseEntity.ok(topic)
@@ -54,7 +51,6 @@ class TopicController(private val service: TopicService) {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    @CacheEvict(value = ["topics"], allEntries = true)
     fun delete(@PathVariable id: Long) = service.delete(id)
 
     @GetMapping("/report")
