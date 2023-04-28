@@ -1,6 +1,10 @@
 package br.com.alura.forum.repository
 
 import br.com.alura.forum.model.Answer
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface AnswerRepository : JpaRepository<Answer, Long>
+interface AnswerRepository : JpaRepository<Answer, Long> {
+    fun findByTopicId(topicId: Long, pagination: Pageable): Page<Answer>
+}

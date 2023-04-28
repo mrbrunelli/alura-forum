@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class AnswerView(
     val id: Long?,
     val message: String,
-    val author: Author,
+    val author: AuthorView,
     val isSolution: Boolean,
     val createdAt: LocalDateTime
 )
