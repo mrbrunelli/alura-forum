@@ -3,6 +3,7 @@ package br.com.alura.forum.mapper
 import br.com.alura.forum.dto.AnswerView
 import br.com.alura.forum.model.Answer
 import org.springframework.stereotype.Component
+import java.io.Serializable
 
 @Component
 class AnswerViewMapper(
