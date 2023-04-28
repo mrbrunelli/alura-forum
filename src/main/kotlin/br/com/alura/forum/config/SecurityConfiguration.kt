@@ -28,6 +28,8 @@ class SecurityConfiguration(
             ?.authorizeRequests()
             ?.antMatchers("/topics")
             ?.hasAuthority("READ_WRITE")
+            ?.antMatchers("/answers")
+            ?.hasAuthority("READ_WRITE")
             ?.antMatchers(HttpMethod.GET, "/swagger-ui/*")
             ?.permitAll()
             ?.antMatchers(HttpMethod.GET, "/v3/api-docs/**")
