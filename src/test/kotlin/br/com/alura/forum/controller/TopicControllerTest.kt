@@ -1,5 +1,6 @@
 package br.com.alura.forum.controller
 
+import br.com.alura.forum.config.DatabaseContainerConfig
 import br.com.alura.forum.config.JWTUtil
 import br.com.alura.forum.model.Role
 import org.junit.jupiter.api.BeforeEach
@@ -12,9 +13,11 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import org.testcontainers.junit.jupiter.Testcontainers
 
+@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TopicControllerTest {
+class TopicControllerTest : DatabaseContainerConfig() {
     @Autowired
     private lateinit var webAppContext: WebApplicationContext
 
@@ -22,7 +25,6 @@ class TopicControllerTest {
     private lateinit var jwtUtil: JWTUtil
 
     private lateinit var mockMvc: MockMvc
-
     private var token: String? = null
 
     companion object {
