@@ -30,6 +30,8 @@ class SecurityConfiguration(
             ?.hasAuthority("READ_WRITE")
             ?.antMatchers("/answers")
             ?.hasAuthority("READ_WRITE")
+            ?.antMatchers("/reports")
+            ?.hasAuthority("ADMIN")
             ?.antMatchers(HttpMethod.GET, "/swagger-ui/*")
             ?.permitAll()
             ?.antMatchers(HttpMethod.GET, "/v3/api-docs/**")
