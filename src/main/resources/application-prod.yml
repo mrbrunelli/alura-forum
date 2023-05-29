@@ -1,13 +1,33 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/forum
-    username: root
-    password: root
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DBNAME}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
   jpa:
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+  cache:
+    type: redis
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: ee95b8e77a525a
+    password: 06be8145a54eb6
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
-  secret: my_secret
+  secret: ${JWT_SECRET}
